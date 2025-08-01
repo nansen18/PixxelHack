@@ -38,6 +38,30 @@ All colors MUST be HSL.
 
     --radius: 0.5rem;
 
+    /* Custom design tokens */
+    --dark-bg: 222.2 84% 4.9%;
+    --dark-text: 210 40% 98%;
+    --golden: 43 96% 56%;
+    --golden-light: 43 100% 70%;
+    --warm-beige: 40 15% 92%;
+    --warm-brown: 30 20% 45%;
+    --bright-yellow: 55 100% 50%;
+    --stellar-blue: 230 100% 50%;
+    
+    /* Gradients */
+    --gradient-golden: linear-gradient(135deg, hsl(var(--golden)), hsl(var(--golden-light)));
+    --gradient-dark: linear-gradient(135deg, hsl(var(--dark-bg)), hsl(222.2 60% 8%));
+    --gradient-organic: radial-gradient(ellipse at center, hsl(var(--golden)) 0%, transparent 70%);
+    
+    /* Shadows */
+    --shadow-soft: 0 4px 20px hsl(var(--foreground) / 0.08);
+    --shadow-dark: 0 10px 40px hsl(0 0% 0% / 0.3);
+    --shadow-golden: 0 8px 32px hsl(var(--golden) / 0.3);
+    
+    /* Animations */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
     --sidebar-background: 0 0% 98%;
 
     --sidebar-foreground: 240 5.3% 26.1%;
