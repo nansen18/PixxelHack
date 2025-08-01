@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Layout from '@/components/Layout';
 
 const Loading: React.FC = () => {
+  const navigate = useNavigate();
   const [counter, setCounter] = useState(59);
   const [isComplete, setIsComplete] = useState(false);
+  const [isFadingOut, setIsFadingOut] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -15,14 +18,25 @@ const Loading: React.FC = () => {
         }
         return prev + 1;
       });
-    }, 80);
+    }, 30); // Faster counter to complete in ~1.2 seconds
 
-    return () => clearInterval(interval);
-  }, []);
+    // Auto redirect after 3 seconds
+    const redirectTimer = setTimeout(() => {
+      setIsFadingOut(true);
+      setTimeout(() => {
+        navigate('/portfolio');
+      }, 500); // Allow fade-out animation to complete
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(redirectTimer);
+    };
+  }, [navigate]);
 
   return (
     <Layout theme="dark" showNav={false}>
-      <div className="min-h-screen flex items-center justify-center relative overflow-hidden">
+      <div className={`min-h-screen flex items-center justify-center relative overflow-hidden transition-opacity duration-500 ${isFadingOut ? 'opacity-0' : 'opacity-100'}`}>
         {/* Background animated dots */}
         <div className="absolute inset-0">
           {[...Array(20)].map((_, i) => (
