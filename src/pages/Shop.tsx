@@ -1,164 +1,297 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Heart, ShoppingBag, Star, Filter, Search } from 'lucide-react';
+import { Input } from '@/components/ui/input';
 
 const Shop: React.FC = () => {
+  const [activeCategory, setActiveCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+
   const featuredProducts = [
     {
       id: 1,
-      name: 'Modern Living Room Set',
-      price: '$1,299',
-      image: '/api/placeholder/600/400',
-      category: 'Living Room'
+      name: 'Luxe Modern Sofa',
+      price: '$2,299',
+      originalPrice: '$2,899',
+      image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop',
+      category: 'Living Room',
+      rating: 4.8,
+      reviews: 127,
+      badge: 'Best Seller',
+      inStock: true
     },
     {
       id: 2,
-      name: 'Scandinavian Chair',
-      price: '$299',
-      image: '/api/placeholder/300/400',
-      category: 'Seating'
+      name: 'Scandinavian Oak Chair',
+      price: '$399',
+      image: 'https://images.unsplash.com/photo-1506439773649-6e0eb8cfb237?w=800&h=600&fit=crop',
+      category: 'Seating',
+      rating: 4.9,
+      reviews: 89,
+      badge: 'New',
+      inStock: true
     },
     {
       id: 3,
-      name: 'Golden-Oak Sofa',
+      name: 'Golden Accent Table',
       price: '$899',
-      image: '/api/placeholder/400/300',
-      category: 'Sofas',
-      featured: true
+      originalPrice: '$1,199',
+      image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=600&fit=crop',
+      category: 'Tables',
+      rating: 4.7,
+      reviews: 156,
+      badge: 'Sale',
+      inStock: true
     },
     {
       id: 4,
-      name: 'Minimalist Stool',
-      price: '$149',
-      image: '/api/placeholder/300/300',
-      category: 'Accessories'
+      name: 'Minimalist Floor Lamp',
+      price: '$249',
+      image: 'https://images.unsplash.com/photo-1524484485831-a92ffc0de03f?w=800&h=600&fit=crop',
+      category: 'Lighting',
+      rating: 4.6,
+      reviews: 73,
+      inStock: false
+    },
+    {
+      id: 5,
+      name: 'Velvet Ottoman',
+      price: '$189',
+      image: 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=800&h=600&fit=crop',
+      category: 'Accessories',
+      rating: 4.5,
+      reviews: 45,
+      badge: 'Limited',
+      inStock: true
+    },
+    {
+      id: 6,
+      name: 'Designer Coffee Table',
+      price: '$1,299',
+      image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=800&h=600&fit=crop',
+      category: 'Tables',
+      rating: 4.9,
+      reviews: 203,
+      badge: 'Premium',
+      inStock: true
     }
   ];
 
+  const categories = [
+    { id: 'all', label: 'All Products', count: 156 },
+    { id: 'living', label: 'Living Room', count: 45 },
+    { id: 'seating', label: 'Seating', count: 32 },
+    { id: 'tables', label: 'Tables', count: 28 },
+    { id: 'lighting', label: 'Lighting', count: 21 },
+    { id: 'accessories', label: 'Accessories', count: 30 }
+  ];
+
+  const getBadgeVariant = (badge: string) => {
+    switch (badge) {
+      case 'Best Seller': return 'bg-golden text-dark-bg';
+      case 'New': return 'bg-purple text-white';
+      case 'Sale': return 'bg-destructive text-white';
+      case 'Limited': return 'bg-warm-brown text-white';
+      case 'Premium': return 'bg-gradient-primary text-white';
+      default: return 'bg-secondary text-secondary-foreground';
+    }
+  };
+
   return (
     <Layout theme="light">
-      <div className="min-h-screen">
+      <div className="min-h-screen bg-gradient-to-br from-warm-beige to-background">
         {/* Hero Section */}
-        <section className="py-20 bg-warm-beige">
+        <section className="pt-24 pb-16">
           <div className="container mx-auto px-6">
-            <div className="text-center max-w-4xl mx-auto">
-              <h1 className="text-4xl md:text-6xl font-light text-warm-brown mb-6">
-                Featured Products
+            <div className="text-center max-w-4xl mx-auto mb-16">
+              <div className="inline-flex items-center space-x-2 mb-6 glass px-4 py-2 rounded-full">
+                <ShoppingBag className="w-4 h-4 text-purple" />
+                <span className="text-sm font-medium">Premium Collection</span>
+              </div>
+              
+              <h1 className="text-5xl md:text-7xl font-playfair font-bold mb-6 animate-fade-in">
+                Design
+                <span className="gradient-text block">Marketplace</span>
               </h1>
-              <p className="text-lg text-warm-brown/80 leading-relaxed max-w-2xl mx-auto">
-                A fusion of comfort, style and quality without compromise. Our department is 
-                unrivaled craftsmanship and design to make your home a very special place. 
-                A collection aimed to make the ordinary extraordinary and the everyday more desirable.
+              
+              <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto animate-fade-in" style={{ animationDelay: '0.2s' }}>
+                Discover premium furniture and decor pieces that transform your space 
+                into a work of art.
               </p>
+            </div>
+
+            {/* Search and Filter Bar */}
+            <div className="max-w-4xl mx-auto mb-12 animate-fade-in" style={{ animationDelay: '0.4s' }}>
+              <div className="glass p-6 rounded-2xl">
+                <div className="flex flex-col md:flex-row gap-4">
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                    <Input 
+                      placeholder="Search for furniture, decor, lighting..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="pl-10 h-12 glass border-0"
+                    />
+                  </div>
+                  <Button variant="outline" className="h-12 px-6 glass border-0 hover-glow">
+                    <Filter className="w-4 h-4 mr-2" />
+                    Filters
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            {/* Category Tabs */}
+            <div className="flex flex-wrap justify-center gap-3 mb-12 animate-fade-in" style={{ animationDelay: '0.6s' }}>
+              {categories.map((category) => (
+                <Button
+                  key={category.id}
+                  variant={activeCategory === category.id ? "default" : "outline"}
+                  onClick={() => setActiveCategory(category.id)}
+                  className={`ripple transition-all duration-300 ${
+                    activeCategory === category.id 
+                      ? 'bg-primary text-primary-foreground shadow-colored scale-105' 
+                      : 'glass border-border/20 hover-glow'
+                  }`}
+                >
+                  {category.label}
+                  <Badge variant="secondary" className="ml-2 text-xs">
+                    {category.count}
+                  </Badge>
+                </Button>
+              ))}
             </div>
           </div>
         </section>
 
         {/* Products Grid */}
-        <section className="py-16">
+        <section className="pb-24">
           <div className="container mx-auto px-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-              {/* Large featured product */}
-              <div className="md:col-span-2 md:row-span-2">
-                <div className="group cursor-pointer h-full">
-                  <div className="relative overflow-hidden rounded-lg h-full min-h-[400px] bg-warm-beige">
-                    <div className="absolute inset-0 bg-gradient-to-br from-amber-100 to-orange-100 p-8 flex items-center justify-center">
-                      {/* Living room scene */}
-                      <div className="w-full h-full relative">
-                        {/* Sofa */}
-                        <div className="absolute bottom-1/4 left-1/4 w-48 h-24 bg-gradient-to-r from-amber-600 to-amber-700 rounded-lg transform -rotate-1">
-                          <div className="absolute -top-2 left-4 w-40 h-6 bg-amber-500 rounded" />
-                          <div className="absolute -top-2 right-4 w-6 h-6 bg-amber-500 rounded" />
-                        </div>
-                        
-                        {/* Coffee table */}
-                        <div className="absolute bottom-1/4 right-1/3 w-24 h-16 bg-gradient-to-r from-amber-800 to-amber-900 rounded transform rotate-12">
-                          <div className="absolute -top-1 inset-x-0 h-2 bg-amber-700 rounded" />
-                        </div>
-                        
-                        {/* Wall art */}
-                        <div className="absolute top-1/4 left-1/3 w-32 h-2 bg-amber-400 rounded-full" />
-                        
-                        {/* Plant */}
-                        <div className="absolute top-1/3 right-1/4 w-8 h-16 bg-green-600 rounded-t-full" />
-                        
-                        {/* Chair */}
-                        <div className="absolute bottom-1/3 right-1/4 w-16 h-20 bg-emerald-700 rounded-lg" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {featuredProducts.map((product, index) => (
+                <div 
+                  key={product.id}
+                  className="group interactive-card p-6 animate-scale-in"
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  {/* Product Image */}
+                  <div className="relative overflow-hidden rounded-2xl mb-6 aspect-square">
+                    <img 
+                      src={product.image} 
+                      alt={product.name}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                    />
+                    
+                    {/* Overlay Actions */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center space-x-3">
+                      <Button size="sm" className="ripple hover-glow">
+                        <ShoppingBag className="w-4 h-4 mr-2" />
+                        Add to Cart
+                      </Button>
+                      <Button size="sm" variant="outline" className="glass border-white/20 text-white hover-glow">
+                        <Heart className="w-4 h-4" />
+                      </Button>
+                    </div>
+
+                    {/* Badges */}
+                    <div className="absolute top-4 left-4 space-y-2">
+                      {product.badge && (
+                        <Badge className={`${getBadgeVariant(product.badge)} shadow-large`}>
+                          {product.badge}
+                        </Badge>
+                      )}
+                      {!product.inStock && (
+                        <Badge variant="destructive">
+                          Out of Stock
+                        </Badge>
+                      )}
+                    </div>
+
+                    {/* Wishlist */}
+                    <Button 
+                      size="sm" 
+                      variant="ghost" 
+                      className="absolute top-4 right-4 w-10 h-10 p-0 glass hover-glow group/heart"
+                    >
+                      <Heart className="w-4 h-4 text-white group-hover/heart:text-red-500 transition-colors" />
+                    </Button>
+                  </div>
+
+                  {/* Product Info */}
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="text-lg font-playfair font-semibold mb-1 group-hover:gradient-text transition-all duration-300">
+                        {product.name}
+                      </h3>
+                      <p className="text-muted-foreground text-sm">{product.category}</p>
+                    </div>
+
+                    {/* Rating */}
+                    <div className="flex items-center space-x-2">
+                      <div className="flex items-center">
+                        {[...Array(5)].map((_, i) => (
+                          <Star 
+                            key={i} 
+                            className={`w-4 h-4 ${i < Math.floor(product.rating) ? 'text-golden fill-golden' : 'text-gray-300'}`} 
+                          />
+                        ))}
                       </div>
+                      <span className="text-sm text-muted-foreground">
+                        {product.rating} ({product.reviews})
+                      </span>
                     </div>
-                    
-                    {/* Hover overlay */}
-                    <div className="absolute inset-0 bg-warm-brown/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                    
-                    {/* Navigation dots */}
-                    <div className="absolute bottom-6 left-6 flex space-x-2">
-                      <div className="w-2 h-2 bg-warm-brown rounded-full" />
-                      <div className="w-2 h-2 bg-warm-brown/30 rounded-full" />
+
+                    {/* Price */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-2">
+                        <span className="text-xl font-bold text-foreground">{product.price}</span>
+                        {product.originalPrice && (
+                          <span className="text-sm text-muted-foreground line-through">{product.originalPrice}</span>
+                        )}
+                      </div>
+                      <Button 
+                        size="sm" 
+                        disabled={!product.inStock}
+                        className="ripple hover-glow"
+                      >
+                        {product.inStock ? 'Add to Cart' : 'Notify Me'}
+                      </Button>
                     </div>
                   </div>
                 </div>
-              </div>
+              ))}
+            </div>
 
-              {/* Chair product */}
-              <div className="group cursor-pointer">
-                <div className="relative overflow-hidden rounded-lg aspect-[3/4] bg-gray-100 mb-4">
-                  <div className="absolute inset-0 p-8 flex items-center justify-center">
-                    <div className="w-20 h-32 bg-gradient-to-b from-emerald-600 to-emerald-800 rounded-lg relative">
-                      <div className="absolute -top-2 inset-x-0 h-4 bg-emerald-500 rounded" />
-                      <div className="absolute bottom-0 -left-2 -right-2 h-3 bg-emerald-700 rounded" />
-                    </div>
-                  </div>
-                  <div className="absolute inset-0 bg-warm-brown/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-                <h3 className="font-medium text-warm-brown mb-1">Scandinavian Chair</h3>
-                <p className="text-warm-brown/60 text-sm">$299</p>
-              </div>
+            {/* Load More */}
+            <div className="text-center mt-16">
+              <Button size="lg" className="ripple hover-glow bg-gradient-primary text-white px-8 py-4">
+                View All Products
+                <ShoppingBag className="w-4 h-4 ml-2" />
+              </Button>
+            </div>
+          </div>
+        </section>
 
-              {/* Chair & Sofa category */}
-              <div className="bg-warm-beige rounded-lg p-6 flex flex-col items-center justify-center text-center group cursor-pointer hover:bg-warm-brown/5 transition-colors duration-300">
-                <div className="w-16 h-16 bg-warm-brown/10 rounded-full flex items-center justify-center mb-4 group-hover:bg-warm-brown/20 transition-colors duration-300">
-                  <div className="w-8 h-8 bg-warm-brown/20 rounded" />
-                </div>
-                <h3 className="font-medium text-warm-brown mb-2">CHAIR & SOFA</h3>
-                <Button variant="outline" size="sm" className="border-warm-brown text-warm-brown hover:bg-warm-brown hover:text-white">
-                  View Now
+        {/* Newsletter Section */}
+        <section className="py-24 bg-gradient-primary">
+          <div className="container mx-auto px-6 text-center">
+            <div className="max-w-3xl mx-auto">
+              <h2 className="text-4xl md:text-6xl font-playfair font-bold text-white mb-6">
+                Stay in Style
+              </h2>
+              <p className="text-xl text-white/80 mb-8">
+                Get the latest design trends and exclusive offers delivered to your inbox.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+                <Input 
+                  placeholder="Enter your email"
+                  className="glass border-white/20 text-white placeholder:text-white/60"
+                />
+                <Button className="bg-white text-purple hover:bg-white/90 ripple px-8">
+                  Subscribe
                 </Button>
-              </div>
-
-              {/* Sofa with price */}
-              <div className="group cursor-pointer">
-                <div className="relative overflow-hidden rounded-lg aspect-[3/4] bg-gray-200 mb-4">
-                  <div className="absolute inset-0 p-6 flex items-center justify-center">
-                    <div className="w-24 h-16 bg-gradient-to-r from-gray-600 to-gray-800 rounded-lg relative">
-                      <div className="absolute -top-1 left-2 right-2 h-3 bg-gray-500 rounded" />
-                      <div className="absolute -top-1 right-1 w-3 h-3 bg-gray-500 rounded" />
-                    </div>
-                  </div>
-                  
-                  {/* Price tag */}
-                  <div className="absolute top-4 right-4 bg-warm-brown text-white px-3 py-1 rounded text-sm font-medium">
-                    $899
-                  </div>
-                  
-                  <div className="absolute inset-0 bg-warm-brown/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-                <h3 className="font-medium text-warm-brown mb-1">Golden-Oak Sofa</h3>
-                <p className="text-warm-brown/60 text-sm">$899</p>
-              </div>
-
-              {/* Stool */}
-              <div className="group cursor-pointer">
-                <div className="relative overflow-hidden rounded-lg aspect-[3/4] bg-orange-50 mb-4">
-                  <div className="absolute inset-0 p-8 flex items-end justify-center">
-                    <div className="w-12 h-12 bg-gradient-to-b from-amber-600 to-amber-800 rounded-full relative">
-                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-6 h-8 bg-amber-700" />
-                      <div className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-8 h-2 bg-amber-800 rounded" />
-                    </div>
-                  </div>
-                  <div className="absolute inset-0 bg-warm-brown/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-                <h3 className="font-medium text-warm-brown mb-1">Minimalist Stool</h3>
-                <p className="text-warm-brown/60 text-sm">$149</p>
               </div>
             </div>
           </div>
