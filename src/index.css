@@ -157,25 +157,36 @@ All colors MUST be HSL.
   
   /* Hover Effects */
   .hover-lift {
-    @apply transition-all duration-300 ease-out;
-    &:hover {
-      transform: translateY(-8px);
-      box-shadow: var(--shadow-large);
-    }
+    transition: all 0.3s ease-out;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-large);
   }
   
   .hover-glow {
-    @apply transition-all duration-300 ease-out;
-    &:hover {
-      box-shadow: var(--shadow-colored);
-      transform: scale(1.02);
-    }
+    transition: all 0.3s ease-out;
+  }
+  
+  .hover-glow:hover {
+    box-shadow: var(--shadow-colored);
+    transform: scale(1.02);
   }
   
   /* Interactive Elements */
   .interactive-card {
-    @apply glass hover-lift cursor-pointer;
-    transition: var(--transition-smooth);
+    background: var(--gradient-glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid hsl(var(--glass-border));
+    box-shadow: var(--shadow-glass);
+    transition: all 0.3s ease-out;
+    cursor: pointer;
+  }
+  
+  .interactive-card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-large);
   }
   
   /* Text Effects */
