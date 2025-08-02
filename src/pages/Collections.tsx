@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import Layout from '@/components/Layout';
+import { Button } from '@/components/ui/button';
+import { Eye, ExternalLink, Play, Grid, List } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const Collections: React.FC = () => {
   const [isPaused, setIsPaused] = useState(false);
+  const [selectedCollection, setSelectedCollection] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const collections = [
     {
@@ -45,8 +50,18 @@ const Collections: React.FC = () => {
           <div className={`flex space-x-8 ${!isPaused ? 'animate-marquee' : ''}`}>
             {/* First set */}
             {collections.map((collection, index) => (
-              <div key={`first-${collection.id}`} className="flex-shrink-0 group cursor-pointer">
-                <div className="w-80 h-60 bg-dark-text/5 rounded-lg overflow-hidden mb-4 relative">
+              <div 
+                key={`first-${collection.id}`} 
+                className="flex-shrink-0 group cursor-pointer"
+                onClick={() => {
+                  setSelectedCollection(collection.id);
+                  toast({
+                    title: `${collection.title} Selected`,
+                    description: collection.description,
+                  });
+                }}
+              >
+                <div className="w-80 h-60 bg-dark-text/5 rounded-lg overflow-hidden mb-4 relative hover-lift">
                   <div className="absolute inset-0 bg-gradient-to-br from-dark-text/10 to-dark-text/5 p-6 flex items-center justify-center">
                     {/* Collection preview based on type */}
                     {collection.id === 'v2' && (
@@ -87,12 +102,31 @@ const Collections: React.FC = () => {
                   </div>
                   
                   {/* Hover overlay */}
-                  <div className="absolute inset-0 bg-golden/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-0 bg-golden/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="flex space-x-3">
+                        <Button size="sm" variant="outline" className="glass-button">
+                          <Eye className="w-4 h-4 mr-1" />
+                          View
+                        </Button>
+                        <Button size="sm" className="bg-bright-yellow text-dark-bg hover:bg-bright-yellow/90">
+                          <Play className="w-4 h-4 mr-1" />
+                          Explore
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
                 
-                <h3 className="text-xl font-medium text-dark-text group-hover:text-golden transition-colors duration-300">
-                  {collection.title}
-                </h3>
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xl font-medium text-dark-text group-hover:text-golden transition-colors duration-300">
+                    {collection.title}
+                  </h3>
+                  {selectedCollection === collection.id && (
+                    <div className="w-2 h-2 bg-golden rounded-full animate-pulse" />
+                  )}
+                </div>
+                <p className="text-sm text-dark-text/60 mt-1">{collection.description}</p>
               </div>
             ))}
             
@@ -158,16 +192,36 @@ const Collections: React.FC = () => {
         <div className="container mx-auto px-6 mt-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {collections.map((collection, index) => (
-              <div key={collection.id} className="text-center group cursor-pointer">
-                <div className="w-12 h-12 bg-golden/20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:bg-golden/40 transition-colors duration-300">
-                  <span className="text-golden font-bold">{collection.id.toUpperCase()}</span>
+              <div 
+                key={collection.id} 
+                className="text-center group cursor-pointer interactive-card p-6"
+                onClick={() => {
+                  setSelectedCollection(collection.id);
+                  toast({
+                    title: `Viewing ${collection.title}`,
+                    description: "Opening detailed collection view...",
+                  });
+                }}
+              >
+                <div className="w-16 h-16 bg-golden/20 rounded-full mx-auto mb-4 flex items-center justify-center group-hover:bg-golden/40 transition-all duration-300 group-hover:scale-110">
+                  <span className="text-golden font-bold text-lg">{collection.id.toUpperCase()}</span>
                 </div>
                 <h4 className="text-dark-text font-medium mb-2 group-hover:text-golden transition-colors duration-300">
                   {collection.title}
                 </h4>
-                <p className="text-dark-text/60 text-sm">
+                <p className="text-dark-text/60 text-sm mb-4">
                   {collection.description}
                 </p>
+                <div className="flex justify-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <Button size="sm" variant="outline" className="text-xs">
+                    <Grid className="w-3 h-3 mr-1" />
+                    Grid
+                  </Button>
+                  <Button size="sm" variant="outline" className="text-xs">
+                    <List className="w-3 h-3 mr-1" />
+                    List
+                  </Button>
+                </div>
               </div>
             ))}
           </div>
